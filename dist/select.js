@@ -1127,6 +1127,7 @@ uis.directive('uiSelect',
 	attrs.$observe('required', function() {
           // No need to use $eval() (thanks to ng-required) since we already get a boolean instead of a string
 	  $select.required = attrs.required !== undefined ? attrs.required : false;
+	  $select.state_required = attrs.required !== undefined ? attrs.required : false;
 	});
 
         attrs.$observe('resetSearchInput', function() {
@@ -1996,7 +1997,9 @@ uis.directive('uiSelectSingle', ['$timeout','$compile', function($timeout, $comp
           ngModel.$setViewValue(newValue);
         }
 	//If value is selected then suppress required (required is completed)
-	if (ngModel.$viewValue && $select.required) {
+	if (typeof newValue === 'undefined' && $select.state_required) {
+	  $select.required = true;
+	} else if (ngModel.$viewValue && $select.required) {
 	  $select.required = false;
 	}
       });
